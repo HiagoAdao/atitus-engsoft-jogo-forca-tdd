@@ -6,6 +6,7 @@
   "main": "src/jogoDaForca.js",
   "scripts": {
     "test": "NODE_NO_WARNINGS=1 node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll",
+    "test:coverage": "NODE_NO_WARNINGS=1 node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll --coverage",
     "start": "node main.js"
   },
   "devDependencies": {

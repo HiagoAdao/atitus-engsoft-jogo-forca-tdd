@@ -85,31 +85,25 @@ export class InterfaceTerminal {
     });
   }
 
-  static lerPalavraSecreta(readline) {
-    return new Promise((resolve) => {
-      readline._writeToOutput = (texto) => {
-        if (readline.stdoutMuted && texto !== '\r\n' && texto !== '\n') {
-          readline.output.write('*');
-        } else if (!readline.stdoutMuted) {
-          readline.output.write(texto);
-        }
-      };
-      readline.question('Digita a palavra para o jogo: ', (palavra) => {
-        readline.stdoutMuted = false;
-        readline._writeToOutput = (texto) => readline.output.write(texto);
-        console.log('');
-        resolve(palavra.toUpperCase());
-      });
-
-      readline.stdoutMuted = true;
-    });
+  static async lerPalavraSecreta(readline) {
+    readline._writeToOutput = (texto) => {
+      if (readline.stdoutMuted && texto !== '\r\n' && texto !== '\n') {
+        readline.output.write('*');
+      } else if (!readline.stdoutMuted) {
+        readline.output.write(texto);
+      }
+    };
+    
+    readline.stdoutMuted = true;
+    const palavra = await readline.question('Digita a palavra para o jogo: ');
+    readline.stdoutMuted = false;
+    
+    readline._writeToOutput = (texto) => readline.output.write(texto);
+    console.log('');
+    return palavra.toUpperCase();
   }
 
-  static lerLetra(readline) {
-    return new Promise((resolve) => {
-      readline.question('Digite uma letra: ', (letra) => {
-        resolve(letra);
-      });
-    });
+  static async lerLetra(readline) {
+    return await readline.question('Digite uma letra: ');
   }
 }
