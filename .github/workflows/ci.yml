@@ -1,0 +1,34 @@
+name: CI — Jogo da Forca
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Executar testes com cobertura
+        run: npm run test:ci -- --coverage
+
+      - name: Upload do relatório de cobertura
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/

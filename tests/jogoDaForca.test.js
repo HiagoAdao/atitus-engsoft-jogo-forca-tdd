@@ -46,4 +46,12 @@ describe('Jogo da Forca (Lógica)', () => {
     jogo.chutar('O');
     expect(jogo.exibirPalavra()).toBe('_ _');
   });
+
+  test('deve ignorar chutes inválidos (nulos ou não-strings)', () => {
+    const jogo = new JogoDaForca('TESTE', 5);
+    jogo.chutar(null);
+    jogo.chutar(123);
+    jogo.chutar(undefined);
+    expect(jogo.obterVidasRestantes()).toBe(5);
+  });
 });

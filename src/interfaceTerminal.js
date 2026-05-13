@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import boxen from 'boxen';
+import { password, input } from '@inquirer/prompts';
 
 export class InterfaceTerminal {
   static #ESTAGIOS_FORCA = [
@@ -85,25 +86,13 @@ export class InterfaceTerminal {
     });
   }
 
-  static async lerPalavraSecreta(readline) {
-    readline._writeToOutput = (texto) => {
-      if (readline.stdoutMuted && texto !== '\r\n' && texto !== '\n') {
-        readline.output.write('*');
-      } else if (!readline.stdoutMuted) {
-        readline.output.write(texto);
-      }
-    };
-    
-    readline.stdoutMuted = true;
-    const palavra = await readline.question('Digita a palavra para o jogo: ');
-    readline.stdoutMuted = false;
-    
-    readline._writeToOutput = (texto) => readline.output.write(texto);
-    console.log('');
+  static async lerPalavraSecreta() {
+    const palavra = await password({ message: 'Digita a palavra para o jogo:', mask: '*' });
     return palavra.toUpperCase();
   }
 
-  static async lerLetra(readline) {
-    return await readline.question('Digite uma letra: ');
+  static async lerLetra() {
+    const letra = await input({ message: 'Digite uma letra: ' });
+    return letra.toUpperCase();
   }
 }

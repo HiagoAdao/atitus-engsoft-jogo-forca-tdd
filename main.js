@@ -1,18 +1,11 @@
-import readlineModule from 'readline/promises';
 import { JogoDaForca, StatusJogo } from './src/jogoDaForca.js';
 import { InterfaceTerminal } from './src/interfaceTerminal.js';
 
-const readline = readlineModule.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
 async function iniciarJogo() {
   console.clear();
-  const palavra = await InterfaceTerminal.lerPalavraSecreta(readline);
+  const palavra = await InterfaceTerminal.lerPalavraSecreta();
   const jogo = new JogoDaForca(palavra || 'JAVASCRIPT');
   await loopJogo(jogo);
-  readline.close();
 }
 
 function renderizarTela(jogo) {
@@ -29,7 +22,7 @@ function renderizarTela(jogo) {
 async function loopJogo(jogo) {
   while (jogo.obterStatus() === StatusJogo.JOGANDO) {
     renderizarTela(jogo);
-    const letra = await InterfaceTerminal.lerLetra(readline);
+    const letra = await InterfaceTerminal.lerLetra();
     if (letra) jogo.chutar(letra[0]);
   }
 

@@ -1,5 +1,12 @@
 import { jest } from '@jest/globals';
-import { InterfaceTerminal } from '../src/interfaceTerminal.js';
+
+jest.unstable_mockModule('@inquirer/prompts', () => ({
+  password: jest.fn(),
+  input: jest.fn()
+}));
+
+const { InterfaceTerminal } = await import('../src/interfaceTerminal.js');
+const { password, input } = await import('@inquirer/prompts');
 
 describe('Validação de Fronteira Externa (DIP)', () => {
   const mockPainter = {
@@ -21,5 +28,25 @@ describe('Validação de Fronteira Externa (DIP)', () => {
   test('deve aplicar cor vermelha nas vidas quando estiverem baixas', () => {
     InterfaceTerminal.formatar('P A L A V R A', 1, 'Jogando', mockPainter);
     expect(mockPainter.red).toHaveBeenCalled();
+  });
+});
+
+describe('Validação de Entrada de Dados (Inquirer)', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('deve ler a palavra secreta e retorná-la em maiúsculas', async () => {
+    password.mockResolvedValueOnce('secreta');
+    const resultado = await InterfaceTerminal.lerPalavraSecreta();
+    expect(password).toHaveBeenCalledWith({ message: 'Digita a palavra para o jogo:', mask: '*' });
+    expect(resultado).toBe('SECRETA');
+  });
+
+  test('deve ler a letra e retorná-la', async () => {
+    input.mockResolvedValueOnce('a');
+    const resultado = await InterfaceTerminal.lerLetra();
+    expect(input).toHaveBeenCalledWith({ message: 'Digite uma letra: ' });
+    expect(resultado).toBe('A');
   });
 });

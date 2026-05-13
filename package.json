@@ -7,13 +7,17 @@
   "scripts": {
     "test": "NODE_NO_WARNINGS=1 node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll",
     "test:coverage": "NODE_NO_WARNINGS=1 node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll --coverage",
-    "start": "node main.js"
+    "test:ci": "NODE_NO_WARNINGS=1 node --experimental-vm-modules node_modules/jest/bin/jest.js --ci",
+    "start": "node main.js",
+    "start:web": "node server.js"
   },
   "devDependencies": {
     "jest": "^29.0.0"
   },
   "dependencies": {
+    "@inquirer/prompts": "^8.4.2",
     "boxen": "^5.1.2",
-    "chalk": "^4.1.2"
+    "chalk": "^4.1.2",
+    "express": "^4.19.2"
   }
 }
