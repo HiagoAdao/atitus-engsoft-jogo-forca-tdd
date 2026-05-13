@@ -12,5 +12,10 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - name: Disparar deploy no Render
-        run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+      - uses: actions/checkout@v4
+
+      - name: Instalar Render CLI
+        run: npm install -g @render-com/cli
+
+      - name: Deploy no Render
+        run: render deploys create ${{ secrets.RENDER_SERVICE_ID }} --api-key ${{ secrets.RENDER_API_KEY }} --wait
