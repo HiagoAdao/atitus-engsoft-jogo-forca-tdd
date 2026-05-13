@@ -12,21 +12,9 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - name: Obter Service ID
-        id: service
-        run: |
-          ID=$(curl -s "https://api.render.com/v1/services?name=jogo-da-forca&limit=1" \
-            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" | \
-            jq -r '.[0].service.id // empty')
-          if [ -z "$ID" ]; then
-            echo "Serviço 'jogo-da-forca' não encontrado. Crie-o no dashboard do Render conectando este repositório."
-            exit 1
-          fi
-          echo "id=$ID" >> $GITHUB_OUTPUT
-
       - name: Disparar deploy
         run: |
-          curl -s -X POST "https://api.render.com/v1/services/${{ steps.service.outputs.id }}/deploys" \
+          curl -s -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys" \
             -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
             -H "Content-Type: application/json" \
             -d '{"clearCache": false}'
