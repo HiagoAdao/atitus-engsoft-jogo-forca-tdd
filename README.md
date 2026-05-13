@@ -37,6 +37,7 @@ jogo-da-forca-tdd/
 ### Pré-requisitos
 
 - [Node.js](https://nodejs.org/) v18 ou superior
+- `jq` instalado (`brew install jq` no macOS)
 
 ### Instalação
 
@@ -54,6 +55,48 @@ npm test
 
 ```bash
 npm start
+```
+
+---
+
+## 🌐 Como Jogar via API
+
+### Configuração
+
+Copie o arquivo de exemplo e preencha com a URL do seu servidor:
+
+```bash
+cp .env.example .env
+# edite .env e defina RENDER_API_URL=https://seu-servico.onrender.com
+```
+
+Para jogar localmente, suba o servidor primeiro:
+
+```bash
+make dev
+# e defina RENDER_API_URL=http://localhost:3000 no .env
+```
+
+### Comandos
+
+| Comando | Descrição |
+|---------|-----------|
+| `make status` | Ver estado atual do jogo |
+| `make guess LETTER=A` | Chutar uma letra |
+| `make restart` | Reiniciar o jogo |
+| `make test` | Rodar os testes |
+
+### Exemplo de partida
+
+```bash
+make status
+# {"palavra":"_ _ _ _ _ _ _ _ _ _","vidas":6,"status":"Jogando..."}
+
+make guess LETTER=A
+# {"palavra":"_ A _ A _ _ _ _ _ _","vidas":6,"status":"Jogando..."}
+
+make guess LETTER=Z
+# {"palavra":"_ A _ A _ _ _ _ _ _","vidas":5,"status":"Jogando..."}
 ```
 
 ---
