@@ -12,23 +12,21 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Instalar Render CLI
-        run: npm install -g @render-com/cli
-
       - name: Obter Service ID
         id: service
         run: |
           ID=$(curl -s "https://api.render.com/v1/services?name=jogo-da-forca&limit=1" \
             -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" | \
             jq -r '.[0].service.id // empty')
+          if [ -z "$ID" ]; then
+            echo "Serviço 'jogo-da-forca' não encontrado. Crie-o no dashboard do Render conectando este repositório."
+            exit 1
+          fi
           echo "id=$ID" >> $GITHUB_OUTPUT
 
-      - name: Criar serviço (primeira vez)
-        if: steps.service.outputs.id == ''
-        run: render blueprint launch --api-key ${{ secrets.RENDER_API_KEY }}
-
-      - name: Deploy
-        if: steps.service.outputs.id != ''
-        run: render deploys create ${{ steps.service.outputs.id }} --api-key ${{ secrets.RENDER_API_KEY }} --wait
+      - name: Disparar deploy
+        run: |
+          curl -s -X POST "https://api.render.com/v1/services/${{ steps.service.outputs.id }}/deploys" \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{"clearCache": false}'
