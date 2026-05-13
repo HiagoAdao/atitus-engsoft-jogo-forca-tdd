@@ -82,7 +82,7 @@ make dev
 | Comando | Descrição |
 |---------|-----------|
 | `make status` | Ver estado atual do jogo |
-| `make guess LETTER=A` | Chutar uma letra |
+| `make guess` | Chutar uma letra (pede a letra interativamente) |
 | `make restart` | Reiniciar o jogo |
 | `make test` | Rodar os testes |
 
@@ -92,10 +92,12 @@ make dev
 make status
 # {"palavra":"_ _ _ _ _ _ _ _ _ _","vidas":6,"status":"Jogando..."}
 
-make guess LETTER=A
+make guess
+# Letra: A
 # {"palavra":"_ A _ A _ _ _ _ _ _","vidas":6,"status":"Jogando..."}
 
-make guess LETTER=Z
+make guess
+# Letra: Z
 # {"palavra":"_ A _ A _ _ _ _ _ _","vidas":5,"status":"Jogando..."}
 ```
 
